@@ -1,0 +1,161 @@
+---
+
+import PhotoPlaceholder from "./PhotoPlaceholder.astro";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  property: CollectionEntry<"properties">;
+  reversed?: boolean;
+  headingLevel?: "h1" | "h2";
+}
+const { property, reversed = false, headingLevel = "h2" } = Astro.props;
+const p = property.data;
+const Heading = headingLevel;
+---
+
+<article class:list={["feature", { "feature--reversed": reversed }]}>
+  <div class="feature__visual">
+    <PhotoPlaceholder fill publicId={p.heroImage} label={`${p.name} — ${p.signatureFeature}`} />
+    
+  </div>
+  <div class="feature__content">
+    <p class="eyebrow">{p.village}, {p.region}</p>
+    <Heading class="feature__name">{p.name}</Heading>
+    <p class="feature__tagline">{p.tagline}</p>
+    <p class="geo-tag">
+      {p.elevationMeters}m elevation &middot; {p.coordinates}
+    </p>
+
+    <div class="feature__signature">
+      <p class="feature__signature-label">{p.signatureFeature}</p>
+      <p class="feature__signature-copy">{p.signatureDescription}</p>
+    </div>
+
+    <dl class="feature__stats">
+      <div>
+        <dt>Rooms</dt>
+        <dd>{p.rooms}</dd>
+      </div>
+      <div>
+        <dt>Sleeps</dt>
+        <dd>{p.sleeps}</dd>
+      </div>
+      <div>
+        <dt>Per person / day</dt>
+        <dd>&#8377;{p.pricePerPersonPerDay.toLocaleString("en-IN")}</dd>
+      </div>
+    </dl>
+
+    <a class="btn btn-primary" href={`/stays/${property.slug}`}>View {p.name}</a>
+  </div>
+</article>
+
+<style>
+  .feature {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: var(--space-4);
+    align-items: stretch;
+  }
+
+  .feature--reversed {
+    direction: rtl;
+  }
+
+  .feature--reversed > * {
+    direction: ltr;
+  }
+
+  .feature__visual {
+    position: relative;
+    min-height: 22rem;
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .feature__motif {
+    position: absolute;
+    inset-inline: 10%;
+    bottom: 8%;
+    opacity: 0.9;
+  }
+
+  .feature__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-1);
+    padding-block: var(--space-2);
+  }
+
+  .feature__name {
+    font-size: var(--text-2xl);
+    margin-block: 0.15em 0.1em;
+  }
+
+  .feature__tagline {
+    font-size: var(--text-lg);
+    color: var(--ink-soft);
+    max-width: 32ch;
+  }
+
+  .feature__signature {
+    margin-top: var(--space-3);
+    padding-top: var(--space-2);
+    border-top: 1px solid rgba(22, 33, 47, 0.12);
+  }
+
+  .feature__signature-label {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--pine);
+  }
+
+  .feature__signature-copy {
+    margin-top: 0.5em;
+    max-width: 46ch;
+    color: var(--ink-soft);
+  }
+
+  .feature__stats {
+    display: flex;
+    gap: var(--space-4);
+    margin: var(--space-3) 0 var(--space-2);
+  }
+
+  .feature__stats dt {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+  }
+
+  .feature__stats dd {
+    margin: 0.2em 0 0;
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--dusk);
+  }
+
+  .feature .btn {
+    align-self: flex-start;
+    margin-top: var(--space-2);
+  }
+
+  @media (max-width: 56rem) {
+    .feature,
+    .feature--reversed {
+      grid-template-columns: 1fr;
+      direction: ltr;
+    }
+    .feature__visual {
+      min-height: 16rem;
+    }
+    .feature__stats {
+      gap: var(--space-3);
+    }
+  }
+</style>

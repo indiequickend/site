@@ -1,0 +1,93 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PropertyFeature from "../../components/PropertyFeature.astro";
+import TopoField from "../../components/TopoField.astro";
+import { getCollection } from "astro:content";
+
+const properties = (await getCollection("properties")).sort(
+  (a, b) => a.data.order - b.data.order
+);
+---
+
+<Layout
+  title="Stays — Prime Peak Stays"
+  description="Every Prime Peak Stays property, each chosen for one view you won't find anywhere else."
+>
+  <section class="stays-hero">
+    <div class="wrap">
+      <p class="eyebrow">All stays</p>
+      <h1>
+        {properties.length === 1
+          ? "One stay, so far."
+          : `${properties.length} stays across the Himalaya.`}
+      </h1>
+      <p class="stays-hero__sub">
+        Prime Peak Stays is starting small on purpose. Here's everywhere
+        we've built — one property today, more as we find views worth the
+        climb.
+      </p>
+    </div>
+  </section>
+
+  <section class="stays-list">
+    <div class="wrap stays-list__inner">
+      {
+        properties.map((property, i) => (
+          <div class="stays-list__card surface-card">
+            <PropertyFeature property={property} reversed={i % 2 === 1} />
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .stays-hero {
+    position: relative;
+    padding-block: calc(var(--space-6) + 3rem) var(--space-5);
+    background: var(--dusk);
+    color: var(--paper);
+    overflow: hidden;
+  }
+
+  .stays-hero__texture {
+    position: absolute;
+    inset: 0;
+    color: var(--mist);
+  }
+
+  .stays-hero > .wrap {
+    position: relative;
+  }
+
+  .stays-hero h1 {
+    color: var(--paper);
+    font-size: var(--text-2xl);
+    margin-top: var(--space-2);
+    max-width: 18ch;
+  }
+
+  .stays-hero__sub {
+    margin-top: var(--space-2);
+    max-width: 44ch;
+    color: var(--mist);
+    font-size: var(--text-lg);
+  }
+
+  .stays-list {
+    padding-block: var(--space-6);
+    background: var(--dusk-deep);
+  }
+
+  .stays-list__inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .stays-list__card {
+    padding: var(--space-4);
+    border-radius: var(--radius);
+  }
+</style>

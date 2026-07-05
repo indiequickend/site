@@ -1,0 +1,103 @@
+---
+interface Props {
+  class?: string;
+  tone?: "light" | "dark";
+}
+const { class: className = "", tone = "light" } = Astro.props;
+---
+
+<svg
+  class={`sightline sightline--${tone} ${className}`}
+  viewBox="0 0 240 130"
+  role="img"
+  aria-label="Line of sight from the homestay across the Teesta river to the Kanchenjunga peak"
+>
+  <path
+    class="sightline__peaks"
+    d="M0 78 L34 40 L52 60 L78 22 L104 58 L128 34 L150 60 L240 78 L240 130 L0 130 Z"
+  ></path>
+  <path
+    class="sightline__river"
+    d="M0 108 C 40 100, 60 118, 96 108 C 132 98, 150 116, 188 106 C 210 100, 224 104, 240 100"
+  ></path>
+  <circle class="sightline__nest" cx="26" cy="94" r="3.5"></circle>
+  <path class="sightline__line" pathLength="100" d="M26 94 L128 34"></path>
+  <circle class="sightline__mark" cx="128" cy="34" r="2.5"></circle>
+</svg>
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      }
+    },
+    { threshold: 0.4 }
+  );
+  document.querySelectorAll(".sightline").forEach((el) => observer.observe(el));
+</script>
+
+<style>
+  .sightline {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .sightline__peaks {
+    fill: var(--pine);
+    opacity: 0.9;
+  }
+
+  .sightline__river {
+    fill: none;
+    stroke: var(--mist);
+    stroke-width: 2;
+    opacity: 0.85;
+  }
+
+  .sightline__nest {
+    fill: var(--gold);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .sightline__mark {
+    fill: var(--gold-bright);
+    opacity: 0;
+    transition: opacity 0.5s ease 1.1s;
+  }
+
+  .sightline__line {
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 1;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    transition: stroke-dashoffset 1.1s ease 0.2s;
+  }
+
+  .sightline.is-visible .sightline__nest {
+    opacity: 1;
+  }
+
+  .sightline.is-visible .sightline__line {
+    stroke-dashoffset: 0;
+  }
+
+  .sightline.is-visible .sightline__mark {
+    opacity: 1;
+  }
+
+  .sightline--dark .sightline__peaks {
+    fill: var(--dusk-deep);
+    opacity: 0.55;
+  }
+
+  .sightline--dark .sightline__river {
+    stroke: rgba(245, 239, 225, 0.55);
+  }
+</style>

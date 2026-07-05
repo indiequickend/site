@@ -1,0 +1,90 @@
+---
+import logo from "../assets/logo/pps-lockup-gold.png";
+
+const { pathname } = Astro.url;
+const isActive = (href: string) =>
+  href === "/" ? pathname === "/" : pathname.startsWith(href);
+---
+
+<header class="site-header">
+  <div class="wrap site-header__row">
+    <a href="/" class="site-header__brand">
+      <img
+        src={logo.src}
+        width={logo.width}
+        height={logo.height}
+        alt="Prime Peak Stays"
+        class="site-header__logo"
+      />
+    </a>
+    <nav class="site-header__nav" aria-label="Primary">
+      <a href="/" aria-current={isActive("/") && pathname === "/" ? "page" : undefined}>Home</a>
+      <a href="/stays" aria-current={isActive("/stays") ? "page" : undefined}>Stays</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    z-index: 10;
+    padding-block: var(--space-2);
+    background: rgba(18, 15, 11, 1.0);
+    border-bottom: 1px solid rgba(194, 146, 47, 0.22);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .site-header__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+
+  .site-header__brand {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  .site-header__logo {
+    height: 2.4rem;
+    width: auto;
+  }
+
+  .site-header__nav {
+    display: flex;
+    gap: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .site-header__nav a {
+    color: var(--paper);
+    text-decoration: none;
+    opacity: 0.75;
+    padding-bottom: 0.2em;
+    border-bottom: 1px solid transparent;
+    transition: opacity 0.2s ease, border-color 0.2s ease;
+  }
+
+  .site-header__nav a:hover,
+  .site-header__nav a[aria-current="page"] {
+    opacity: 1;
+    border-color: var(--gold);
+  }
+
+  @media (max-width: 26rem) {
+    .site-header__logo {
+      height: 1.9rem;
+    }
+    .site-header__nav {
+      gap: var(--space-2);
+    }
+  }
+</style>

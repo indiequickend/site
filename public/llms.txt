@@ -1,0 +1,18 @@
+# Prime Peak Stays
+
+> A small, growing homestay chain across the Himalaya. Every property is chosen for one view worth building a house around — never more than a handful of rooms, built from local stone and timber, run by people who live in the hills they're hosting you in.
+
+Prime Peak Stays is not a hotel chain. Each stay sits in a different range, is scouted for its sightline before its plot, and is run at homestay scale (a handful of rooms, not a resort).
+
+## Properties
+
+- [Kanchenjunga Valley Retreat](https://primepeakstays.example/stays/kanchenjunga-valley-retreat): A stone-and-timber homestay in Barmek, Kalimpong (West Bengal, India), 1,247m elevation, facing both the Teesta river and Kanchenjunga from the same deck. 4 rooms, sleeps up to 15. The first property in the chain.
+
+## Pages
+
+- [All stays](https://primepeakstays.example/stays): Every current Prime Peak Stays property.
+- [Home](https://primepeakstays.example/): Brand overview and the principles that decide where the chain builds next.
+
+## Contact
+
+Enquiries: stays@primepeakstays.com

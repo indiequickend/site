@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#120F0B"/>
+  <path d="M0 470 C 220 410, 340 500, 500 460 S 780 430, 1200 480 L 1200 630 L 0 630 Z" fill="#241C13" opacity="0.9"/>
+  <path d="M-40 380 L120 220 L200 320 L340 150 L460 300 L620 190 L760 320 L1240 400" fill="none" stroke="#DCD3BE" stroke-width="3" opacity="0.3"/>
+  <circle cx="140" cy="360" r="6" fill="#C2922F"/>
+  <path d="M140 360 L460 300" stroke="#C2922F" stroke-width="2" stroke-dasharray="6 6"/>
+  <circle cx="460" cy="300" r="5" fill="#E8C878"/>
+  <text x="90" y="180" font-family="Georgia, 'Playfair Display', serif" font-size="72" font-weight="700" fill="#F5EFE1">Prime Peak Stays</text>
+  <text x="90" y="230" font-family="Georgia, 'Playfair Display', serif" font-size="30" fill="#DCD3BE">Every stay is chosen for one view.</text>
+</svg>

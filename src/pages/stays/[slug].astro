@@ -1,0 +1,442 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import TopoField from "../../components/TopoField.astro";
+import BenchmarkNumeral from "../../components/BenchmarkNumeral.astro";
+import PhotoPlaceholder from "../../components/PhotoPlaceholder.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+
+export async function getStaticPaths() {
+  const properties = await getCollection("properties");
+  return properties.map((property) => ({
+    params: { slug: property.slug },
+    props: { property },
+  }));
+}
+
+interface Props {
+  property: CollectionEntry<"properties">;
+}
+const { property } = Astro.props;
+const p = property.data;
+const { Content } = await property.render();
+
+const [lat, lon] = p.coordinates
+  .split(",")
+  .map((part) => parseFloat(part.trim()));
+
+const lodgingSchema = {
+  "@context": "https://schema.org",
+  "@type": "LodgingBusiness",
+  name: p.name,
+  description: p.signatureDescription,
+  image: new URL("/og-default.svg", Astro.site).toString(),
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: p.village,
+    addressRegion: p.region,
+    addressCountry: "IN",
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: lat,
+    longitude: lon,
+  },
+  numberOfRooms: p.rooms,
+  priceRange: `₹${p.pricePerPersonPerDay.toLocaleString("en-IN")} per person / day`,
+  amenityFeature: p.amenities.map((name) => ({
+    "@type": "LocationFeatureSpecification",
+    name,
+    value: true,
+  })),
+};
+---
+
+<Layout
+  title={`${p.name} — Prime Peak Stays`}
+  description={p.tagline}
+  jsonLd={lodgingSchema}
+>
+  <section class="stay-hero">
+    <PhotoPlaceholder
+      fill
+      eager
+      publicId={p.heroImage}
+      label={`${p.name} hero — ${p.signatureFeature}`}
+    />
+    <div class="stay-hero__scrim"></div>
+    <div class="wrap stay-hero__inner">
+      <p class="eyebrow">{p.village}, {p.region}</p>
+      <h1>{p.name}</h1>
+      <p class="stay-hero__tagline">{p.tagline}</p>
+      <p class="geo-tag">
+        {p.elevationMeters}m elevation &middot; {p.coordinates}
+      </p>
+    </div>
+  </section>
+
+  <section class="stay-signature">
+    <div class="wrap stay-signature__inner">
+      <p class="eyebrow">The view</p>
+      <h2>{p.signatureFeature}</h2>
+      <p>{p.signatureDescription}</p>
+    </div>
+  </section>
+
+  <section class="stay-gallery">
+    <div class="wrap">
+      <p class="eyebrow">More of {p.name}</p>
+      <h2>Gallery</h2>
+      <div class="stay-gallery__grid">
+        {
+          p.gallery.map((shot) => (
+            <figure class="stay-gallery__item">
+              <PhotoPlaceholder ratio="4/3" publicId={shot.publicId} label={shot.caption} />
+              <figcaption>{shot.caption}</figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="stay-details">
+    <div class="wrap stay-details__inner">
+      <div class="stay-details__copy">
+        <Content />
+      </div>
+      <aside class="stay-details__card surface-card">
+        <dl>
+          <div>
+            <dt>Rooms</dt>
+            <dd>{p.rooms}</dd>
+          </div>
+          <div>
+            <dt>Sleeps</dt>
+            <dd>{p.sleeps}</dd>
+          </div>
+          <div>
+            <dt>Per person / day</dt>
+            <dd>&#8377;{p.pricePerPersonPerDay.toLocaleString("en-IN")}</dd>
+          </div>
+        </dl>
+        <a class="btn btn-primary" href="mailto:stays@primepeakstays.com"
+          >Enquire about {p.name}</a
+        >
+        <a class="stay-details__back" href="/stays">&larr; All stays</a>
+      </aside>
+    </div>
+  </section>
+
+  <section class="stay-amenities">
+    <div class="wrap">
+      <p class="eyebrow">What's included</p>
+      <h2>Amenities</h2>
+      <ul class="stay-amenities__list">
+        {p.amenities.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="stay-reach">
+    <div class="wrap stay-reach__inner">
+      <p class="eyebrow">Getting there</p>
+      <h2>How to reach {p.name}</h2>
+      <p>{p.howToReach}</p>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .stay-hero {
+    position: relative;
+    min-height: 64vh;
+    display: flex;
+    align-items: flex-end;
+    color: var(--paper);
+    overflow: hidden;
+  }
+
+  .stay-hero__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      190deg,
+      rgba(18, 15, 11, 0.25) 0%,
+      rgba(18, 15, 11, 0.5) 40%,
+      var(--dusk-deep) 94%
+    );
+  }
+
+  .stay-hero__benchmark {
+    position: absolute;
+    z-index: 1;
+    right: 4%;
+    bottom: -6%;
+    color: var(--paper);
+  }
+
+  .stay-hero__inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding-block: calc(var(--space-6) + 2rem) var(--space-4);
+  }
+
+  .stay-hero h1 {
+    color: var(--paper);
+    font-size: var(--text-3xl);
+    margin-top: var(--space-1);
+  }
+
+  .stay-hero__tagline {
+    margin-top: var(--space-2);
+    font-size: var(--text-lg);
+    max-width: 40ch;
+    color: rgba(245, 239, 225, 0.9);
+  }
+
+  .stay-hero__inner .geo-tag {
+    margin-top: var(--space-2);
+    color: var(--paper);
+  }
+
+  .stay-hero__inner .geo-tag::before {
+    background: var(--gold);
+  }
+
+  .stay-hero__motif {
+    position: absolute;
+    inset-inline: 0;
+    bottom: -1px;
+    opacity: 0.45;
+    z-index: 1;
+  }
+
+  .stay-signature {
+    position: relative;
+    background: var(--pine);
+    color: var(--paper);
+    padding-block: var(--space-5);
+    overflow: hidden;
+  }
+
+  .stay-signature__texture {
+    position: absolute;
+    inset: 0;
+    color: var(--mist);
+  }
+
+  .stay-signature__inner {
+    position: relative;
+    max-width: 48rem;
+  }
+
+  .stay-signature .eyebrow {
+    color: var(--gold-bright);
+  }
+
+  .stay-signature h2 {
+    color: var(--paper);
+    font-size: var(--text-xl);
+    margin-top: var(--space-1);
+  }
+
+  .stay-signature p:last-child {
+    margin-top: var(--space-2);
+    color: var(--mist);
+    font-size: var(--text-lg);
+  }
+
+  .stay-details {
+    padding-block: var(--space-6);
+    background: var(--dusk-deep);
+  }
+
+  .stay-details__inner {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: var(--space-5);
+    align-items: start;
+  }
+
+  .stay-details__copy {
+    font-size: var(--text-lg);
+    color: var(--ink-on-dark-soft);
+    max-width: 60ch;
+  }
+
+  .stay-details__copy :global(p + p) {
+    margin-top: var(--space-2);
+  }
+
+  .stay-details__card {
+    padding: var(--space-3);
+    border-radius: var(--radius);
+    position: sticky;
+    top: var(--space-3);
+  }
+
+  .stay-details__card dl {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-3);
+  }
+
+  .stay-details__card dt {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+  }
+
+  .stay-details__card dd {
+    margin: 0.2em 0 0;
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 600;
+    color: var(--dusk);
+  }
+
+  .stay-details__card .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .stay-details__back {
+    display: inline-block;
+    margin-top: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    text-decoration: none;
+  }
+
+  .stay-details__back:hover {
+    color: var(--dusk);
+  }
+
+  @media (max-width: 56rem) {
+    .stay-details__inner {
+      grid-template-columns: 1fr;
+    }
+    .stay-details__card {
+      position: static;
+    }
+    .stay-hero__benchmark {
+      display: none;
+    }
+  }
+
+  .stay-gallery {
+    padding-block: var(--space-6);
+    background: var(--dusk);
+  }
+
+  .stay-gallery h2 {
+    font-size: var(--text-xl);
+    margin-top: var(--space-1);
+  }
+
+  .stay-gallery__grid {
+    margin-top: var(--space-4);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+  }
+
+  .stay-gallery__item img {
+    border-radius: var(--radius);
+  }
+
+  .stay-gallery__item figcaption {
+    margin-top: 0.6em;
+    font-size: var(--text-sm);
+    color: var(--ink-on-dark-soft);
+  }
+
+  .stay-amenities {
+    padding-block: var(--space-6);
+    background: var(--pine);
+    color: var(--paper);
+  }
+
+  .stay-amenities h2 {
+    font-size: var(--text-xl);
+    margin-top: var(--space-1);
+  }
+
+  .stay-amenities__list {
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2) var(--space-4);
+  }
+
+  .stay-amenities__list li {
+    position: relative;
+    padding-left: 1.4em;
+    color: var(--mist);
+    font-size: var(--text-lg);
+  }
+
+  .stay-amenities__list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 0.6em;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .stay-reach {
+    position: relative;
+    padding-block: var(--space-6);
+    background: var(--dusk-deep);
+    overflow: hidden;
+  }
+
+  .stay-reach__texture {
+    position: absolute;
+    inset: 0;
+    color: var(--mist);
+  }
+
+  .stay-reach__inner {
+    position: relative;
+    max-width: 44rem;
+  }
+
+  .stay-reach h2 {
+    font-size: var(--text-xl);
+    margin-top: var(--space-1);
+    max-width: 20ch;
+  }
+
+  .stay-reach p {
+    margin-top: var(--space-2);
+    font-size: var(--text-lg);
+    color: var(--ink-on-dark-soft);
+  }
+
+  @media (max-width: 56rem) {
+    .stay-gallery__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .stay-amenities__list {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 30rem) {
+    .stay-gallery__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

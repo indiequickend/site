@@ -1,0 +1,387 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PropertyFeature from "../components/PropertyFeature.astro";
+import TopoField from "../components/TopoField.astro";
+import BenchmarkNumeral from "../components/BenchmarkNumeral.astro";
+import PhotoPlaceholder from "../components/PhotoPlaceholder.astro";
+import { getCollection } from "astro:content";
+
+const properties = (await getCollection("properties")).sort(
+  (a, b) => a.data.order - b.data.order
+);
+const flagship = properties[0];
+
+const faqs = [
+  {
+    question: "How do I book a stay at Prime Peak Stays?",
+    answer:
+      "Email stays@primepeakstays.com with your dates and party size. We reply directly — there's no online booking system yet, since Kanchenjunga Valley Retreat is still the only property.",
+  },
+  {
+    question: "How do you get to Kanchenjunga Valley Retreat?",
+    answer:
+      "The closest airport is Bagdogra and the closest railhead is New Jalpaiguri (NJP); both connect by road up through Kalimpong to Barmek. We send exact directions and a recommended driver once your dates are confirmed.",
+  },
+  {
+    question: "What's included in the per-person rate?",
+    answer:
+      "The room, all meals, and the view. Kanchenjunga Valley Retreat's rate is quoted per person per day and covers homestay-style meals cooked on site, not just the bed.",
+  },
+  {
+    question: "Is Kanchenjunga Valley Retreat suitable for an extended family or group?",
+    answer:
+      "Yes — four rooms sleeping up to fifteen guests. Most bookings are one family or group taking the whole property, rather than rooms split between strangers.",
+  },
+  {
+    question: "When's the best time to see both the Teesta and Kanchenjunga at once?",
+    answer:
+      "Early morning before the mist burns off the valley, or just after sunset for the alpenglow on the peak. The signature view changes character between the two, so a two-night stay catches both.",
+  },
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.question,
+    acceptedAnswer: { "@type": "Answer", text: f.answer },
+  })),
+};
+---
+
+<Layout
+  title="Prime Peak Stays — a homestay chain built one view at a time"
+  description="Prime Peak Stays is a new homestay chain across the Himalaya, starting with Kanchenjunga Valley Retreat in Barmek, Kalimpong. Every stay is chosen for one view you won't find anywhere else."
+  jsonLd={faqJsonLd}
+>
+  <section class="hero">
+    <PhotoPlaceholder
+      fill
+      eager
+      publicId={flagship.data.heroImage}
+      label={`Hero — first light over ${flagship.data.village}, looking across the Teesta to Kanchenjunga`}
+      class="hero__photo"
+    />
+    <div class="hero__scrim"></div>
+    
+    <div class="wrap hero__inner">
+      <p class="eyebrow hero__eyebrow">Prime Peak Stays &middot; est. 2026</p>
+      <h1 class="hero__headline">
+        Every stay is chosen<br />for one view.
+      </h1>
+      <p class="hero__sub">
+        Not a chain of rooms with a mountain nearby — a small, growing
+        collection of homestays, each one built around the single sightline
+        that makes it worth the climb.
+      </p>
+      <div class="hero__cta">
+        <a class="btn btn-primary" href="#flagship">See the first stay</a>
+        <a class="btn btn-ghost" href="/stays">All stays</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="principles">
+    <div class="wrap principles__inner">
+      <p class="eyebrow">How we choose</p>
+      <h2 class="principles__title">What decides where we build</h2>
+      <ul class="principles__list">
+        <li>
+          <p class="geo-tag">the view comes first</p>
+          <p>
+            We scout the sightline before we scout the plot. If a place
+            doesn't have one view worth building a house around, we don't
+            build there.
+          </p>
+        </li>
+        <li>
+          <p class="geo-tag">never more than a homestay</p>
+          <p>
+            Small by design — a handful of rooms per property, built from
+            local stone and timber, run by people who live in the hills
+            they're hosting you in.
+          </p>
+        </li>
+        <li>
+          <p class="geo-tag">one chain, many ranges</p>
+          <p>
+            Kanchenjunga Valley Retreat is the first. Each stay that follows will sit in a
+            different range, with its own view, under the same standard.
+          </p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="flagship" id="flagship">
+    <div class="wrap">
+      <p class="eyebrow">The first stay</p>
+      <div class="flagship__body surface-card">
+        <PropertyFeature property={flagship} headingLevel="h2" />
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="wrap faq__inner">
+      <p class="eyebrow">Before you write in</p>
+      <h2>Questions people ask before their first stay</h2>
+      <dl class="faq__list">
+        {
+          faqs.map((f) => (
+            <div class="faq__item">
+              <dt>
+                <details>
+                  <summary>{f.question}</summary>
+                  <p>{f.answer}</p>
+                </details>
+              </dt>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <section class="expansion">
+    <div class="wrap expansion__inner">
+      <h2>The next Prime Peak Stay is already being scouted.</h2>
+      <p>
+        We're looking at ridgelines across the Eastern Himalaya for the
+        second property. If you know a view, or want to be the first to know
+        when we open it, get in touch.
+      </p>
+      <a class="btn btn-primary" href="mailto:stays@primepeakstays.com"
+        >Talk to us</a
+      >
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 92vh;
+    display: flex;
+    align-items: center;
+    color: var(--paper);
+    overflow: hidden;
+  }
+
+  .hero__photo {
+    z-index: 0;
+  }
+
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      190deg,
+      rgba(18, 15, 11, 0.3) 0%,
+      rgba(18, 15, 11, 0.55) 45%,
+      var(--dusk-deep) 92%
+    );
+  }
+
+  .hero__benchmark {
+    position: absolute;
+    z-index: 2;
+    right: 4%;
+    bottom: -4%;
+    color: var(--paper);
+  }
+
+  .hero__inner {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    padding-block: var(--space-6);
+  }
+
+  .hero__eyebrow {
+    color: var(--gold);
+  }
+
+  .hero__headline {
+    font-size: var(--text-3xl);
+    color: var(--paper);
+    margin-top: var(--space-2);
+    max-width: 16ch;
+  }
+
+  .hero__sub {
+    margin-top: var(--space-3);
+    max-width: 42ch;
+    font-size: var(--text-lg);
+    color: rgba(245, 239, 225, 0.88);
+  }
+
+  .hero__cta {
+    display: flex;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .hero__motif {
+    position: absolute;
+    inset-inline: 0;
+    bottom: -1px;
+    z-index: 2;
+    opacity: 0.7;
+  }
+
+  .principles {
+    position: relative;
+    padding-block: var(--space-6);
+    background: var(--dusk-deep);
+    overflow: hidden;
+  }
+
+  .principles__texture {
+    position: absolute;
+    inset: 0;
+    color: var(--mist);
+  }
+
+  .principles__inner {
+    position: relative;
+  }
+
+  .principles__title {
+    font-size: var(--text-xl);
+    max-width: 20ch;
+    margin-top: var(--space-1);
+  }
+
+  .principles__list {
+    list-style: none;
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+  }
+
+  .principles__list li {
+    border-top: 1px solid rgba(220, 228, 224, 0.18);
+    padding-top: var(--space-2);
+  }
+
+  .principles__list p:last-child {
+    margin-top: 0.6em;
+    color: var(--ink-on-dark-soft);
+  }
+
+  .flagship {
+    padding-block: var(--space-6);
+    background: var(--dusk-deep);
+  }
+
+  .flagship__body {
+    margin-top: var(--space-3);
+    padding: var(--space-4);
+    border-radius: var(--radius);
+  }
+
+  .faq {
+    padding-block: var(--space-6);
+    background: var(--pine);
+  }
+
+  .faq__inner {
+    max-width: 48rem;
+  }
+
+  .faq h2 {
+    font-size: var(--text-xl);
+    margin-top: var(--space-1);
+    max-width: 22ch;
+  }
+
+  .faq__list {
+    margin: var(--space-4) 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .faq__item {
+    border-bottom: 1px solid rgba(220, 228, 224, 0.18);
+    padding-bottom: var(--space-2);
+  }
+
+  .faq__item details summary {
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--paper);
+    list-style: none;
+  }
+
+  .faq__item details summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__item details summary::after {
+    content: "+";
+    float: right;
+    color: var(--gold);
+    font-family: var(--font-mono);
+  }
+
+  .faq__item details[open] summary::after {
+    content: "\2212";
+  }
+
+  .faq__item details p {
+    margin-top: 0.6em;
+    color: var(--mist);
+    max-width: 56ch;
+  }
+
+  .expansion {
+    position: relative;
+    background: var(--dusk-deep);
+    color: var(--paper);
+    padding-block: var(--space-6);
+    overflow: hidden;
+  }
+
+  .expansion__texture {
+    position: absolute;
+    inset: 0;
+    color: var(--mist);
+  }
+
+  .expansion__inner {
+    position: relative;
+    max-width: 42rem;
+  }
+
+  .expansion h2 {
+    color: var(--paper);
+    font-size: var(--text-xl);
+  }
+
+  .expansion p {
+    margin-top: var(--space-2);
+    color: var(--mist);
+  }
+
+  .expansion .btn {
+    margin-top: var(--space-3);
+  }
+
+  @media (max-width: 56rem) {
+    .principles__list {
+      grid-template-columns: 1fr;
+    }
+    .hero__benchmark {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,83 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import favicon from "../assets/logo/pps-mark-large.png";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+  /** Absolute or root-relative path to a 1200x630 share image. */
+  image?: string;
+  type?: "website" | "article";
+  /** One or more JSON-LD nodes to publish alongside the sitewide Organization schema. */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+const {
+  title,
+  description,
+  image = "/og-default.svg",
+  type = "website",
+  jsonLd,
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL(image, Astro.site);
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Prime Peak Stays",
+  description:
+    "A homestay chain across the Himalaya, each property chosen for one view you won't find anywhere else.",
+  url: Astro.site?.toString(),
+  email: "stays@primepeakstays.com",
+  areaServed: "IN",
+};
+
+const jsonLdNodes = [
+  organizationSchema,
+  ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []),
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="icon" type="image/png" href={favicon.src} />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content="Prime Peak Stays" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;700&family=Playfair+Display:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    {
+      jsonLdNodes.map((node) => (
+        <script type="application/ld+json" set:html={JSON.stringify(node)} />
+      ))
+    }
+  </head>
+  <body>
+    <Header />
+    <slot />
+    <Footer />
+  </body>
+</html>

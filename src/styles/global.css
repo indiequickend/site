@@ -1,0 +1,233 @@
+/* ---------------------------------------------------------------
+   Design tokens
+   Recut around the brand's crest mark: a foil-gold crowned peak on
+   black. One confident accent (gold) rather than competing warm
+   hues — the old rose/bronze note is retired. Dusk and dusk-deep
+   are pushed further apart (walnut vs. near-black) so alternating
+   sections read as deliberate layering, not a repeated tone. Deep
+   pine stays as the one cool note (the cardamom forest the
+   homestays sit in). Paper is kept for small elevated insets (stat
+   cards, booking panel) rather than full-bleed backgrounds.
+------------------------------------------------------------------ */
+:root {
+  --dusk: #241c13;
+  --dusk-deep: #120f0b;
+  --pine: #1b2e17;
+  --pine-light: #4a6a3f;
+  --gold: #c2922f;
+  --gold-bright: #e8c878;
+  --mist: #dcd3be;
+  --paper: #f5efe1;
+
+  --ink: #1c1712;
+  --ink-soft: #5a5142;
+  --ink-on-dark: rgba(245, 239, 225, 0.88);
+  --ink-on-dark-soft: rgba(220, 211, 190, 0.62);
+
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Karla", "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.25rem;
+  --text-xl: clamp(1.75rem, 1.4rem + 1.6vw, 2.5rem);
+  --text-2xl: clamp(2.5rem, 1.9rem + 2.6vw, 4rem);
+  --text-3xl: clamp(3rem, 2.1rem + 4vw, 5.5rem);
+
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.5rem;
+  --space-5: 4rem;
+  --space-6: 6rem;
+  --space-7: 9rem;
+
+  --max-width: 78rem;
+  --radius: 2px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--dusk-deep);
+  color: var(--ink-on-dark);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.08;
+  margin: 0;
+  color: var(--paper);
+  overflow-wrap: break-word;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+.wrap {
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--space-3);
+}
+
+/* Elevated cream inset — the one place paper reads as a surface
+   rather than the page canvas (stat cards, booking panel, FAQ
+   items). Flips text colors back to the light-surface pairing. */
+.surface-card {
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid rgba(194, 146, 47, 0.25);
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.35);
+}
+
+.surface-card h1,
+.surface-card h2,
+.surface-card h3 {
+  color: var(--dusk);
+}
+
+.surface-card .eyebrow {
+  color: var(--ink-soft);
+}
+
+.surface-card .geo-tag {
+  color: var(--pine);
+}
+
+/* Recurring geographic-data caption device: elevation, coordinates,
+   distances. Real per-property data used as a structural label
+   in place of arbitrary numbering. */
+.geo-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mist);
+}
+
+.geo-tag::before {
+  content: "";
+  width: 0.4em;
+  height: 0.4em;
+  background: var(--gold);
+  border-radius: 50%;
+  flex: none;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-on-dark-soft);
+}
+
+/* Rule-flanked small-caps treatment, lifted directly from the
+   logo's own "STAYS" sub-lockup. Use sparingly — one or two per
+   page — as the callback to the mark, not a general label style. */
+.crest-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-variant: small-caps;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+}
+
+.crest-label::before,
+.crest-label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.5;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--text-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 1em 2em;
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn:focus-visible,
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.btn-primary {
+  background: linear-gradient(160deg, var(--gold-bright) 0%, var(--gold) 60%);
+  color: var(--dusk-deep);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--paper);
+  border: 1px solid rgba(245, 239, 225, 0.35);
+}
+
+.btn-ghost:hover {
+  border-color: var(--gold);
+  color: var(--gold-bright);
+}

@@ -1,0 +1,67 @@
+---
+import { cloudinaryUrl, cloudinarySrcSet, isCloudinaryConfigured } from "../lib/cloudinary";
+
+/* Real photo when a Cloudinary publicId is set; a placehold.co
+   placeholder (tinted to the brand's ink-black/gold pair) until
+   then, so the site never depends on photography existing yet. */
+interface Props {
+  label: string;
+  ratio?: string;
+  /** Cloudinary public ID. Omit to keep showing the placeholder. */
+  publicId?: string;
+  /** Fill the parent (position: absolute; inset: 0) instead of sizing by aspect-ratio. Parent needs position: relative. */
+  fill?: boolean;
+  /** Set true for above-the-fold hero images so the browser doesn't defer loading them. */
+  eager?: boolean;
+  class?: string;
+}
+const {
+  label,
+  ratio = "16/9",
+  publicId,
+  fill = false,
+  eager = false,
+  class: className = "",
+} = Astro.props;
+
+const [wRatio, hRatio] = ratio.split("/").map(Number);
+const width = 1200;
+const height = Math.round((width * hRatio) / wRatio);
+
+const useCloudinary = Boolean(publicId) && isCloudinaryConfigured;
+
+const src = useCloudinary
+  ? cloudinaryUrl(publicId!, { width, ratio })
+  : `https://placehold.co/${width}x${height}/120F0B/C2922F?font=playfair-display&text=${encodeURIComponent(label)}`;
+const srcset = useCloudinary ? cloudinarySrcSet(publicId!, ratio) : undefined;
+---
+
+<img
+  src={src}
+  srcset={srcset}
+  sizes={srcset ? (fill ? "100vw" : "(max-width: 56rem) 100vw, 33vw") : undefined}
+  alt={label}
+  width={width}
+  height={height}
+  loading={eager ? "eager" : "lazy"}
+  fetchpriority={eager ? "high" : "auto"}
+  class:list={["photo-slot", { "photo-slot--fill": fill }, className]}
+  style={`--ratio: ${ratio}`}
+/>
+
+<style>
+  .photo-slot {
+    display: block;
+    width: 100%;
+    aspect-ratio: var(--ratio);
+    object-fit: cover;
+  }
+
+  .photo-slot--fill {
+    position: absolute;
+    inset: 0;
+    aspect-ratio: auto;
+    width: 100%;
+    height: 100%;
+  }
+</style>
