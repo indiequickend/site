@@ -26,4 +26,4 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-Sitemap: https://primepeakstays.example/sitemap-index.xml
+Sitemap: https://primepeakstays.com/sitemap-index.xml
