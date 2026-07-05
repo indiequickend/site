@@ -14,11 +14,11 @@ signatureDescription: "Stand on the deck and turn your head once: the Teesta cut
 heroImage: "sandakphu-img_fs9axk"
 amenities:
   - "All meals cooked on site, homestay-style"
-  - "Wood-fired bukhari stove heating in every room"
-  - "Private deck facing the Teesta and Kanchenjunga"
+  - "Teesta and Kanchenjunga view rooms"
   - "Hot water round the clock"
+  - "Free wi-fi access"
   - "Free on-property parking"
-  - "Bonfire evenings on request"
+  - "Bonfire / bbq evenings on request"
 howToReach: "The closest airport is Bagdogra and the closest railhead is New Jalpaiguri (NJP); both connect by road up through Kalimpong town to Barmek, climbing past terraced tea and cardamom before the final stretch of ridge road. We send exact directions and a recommended driver's contact once your dates are confirmed."
 gallery:
   - caption: "The deck at first light, Teesta below and Kanchenjunga above"

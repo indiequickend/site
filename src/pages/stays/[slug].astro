@@ -43,6 +43,7 @@ const lodgingSchema = {
   },
   numberOfRooms: p.rooms,
   priceRange: `₹${p.pricePerPersonPerDay.toLocaleString("en-IN")} per person / day`,
+  telephone: "+91-8910569649",
   amenityFeature: p.amenities.map((name) => ({
     "@type": "LocationFeatureSpecification",
     name,
@@ -119,8 +120,16 @@ const lodgingSchema = {
             <dd>&#8377;{p.pricePerPersonPerDay.toLocaleString("en-IN")}</dd>
           </div>
         </dl>
-        <a class="btn btn-primary" href="mailto:stays@primepeakstays.com"
-          >Enquire about {p.name}</a
+        <a
+          class="btn btn-primary"
+          href={`https://wa.me/918910569649?text=${encodeURIComponent(
+            `Hi, I'd like to enquire about ${p.name}.`
+          )}`}
+          target="_blank"
+          rel="noopener">Enquire about {p.name}</a
+        >
+        <a class="stay-details__call" href="tel:+918910569649"
+          >Or call +91 89105 69649</a
         >
         <a class="stay-details__back" href="/stays">&larr; All stays</a>
       </aside>
@@ -161,7 +170,7 @@ const lodgingSchema = {
     inset: 0;
     z-index: 1;
     background: linear-gradient(
-      190deg,
+      180deg,
       rgba(18, 15, 11, 0.25) 0%,
       rgba(18, 15, 11, 0.5) 40%,
       var(--dusk-deep) 94%
@@ -303,6 +312,21 @@ const lodgingSchema = {
   .stay-details__card .btn {
     width: 100%;
     justify-content: center;
+  }
+
+  .stay-details__call {
+    display: block;
+    margin-top: var(--space-2);
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    text-decoration: none;
+  }
+
+  .stay-details__call:hover {
+    color: var(--dusk);
   }
 
   .stay-details__back {

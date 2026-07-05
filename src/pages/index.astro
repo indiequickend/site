@@ -15,7 +15,7 @@ const faqs = [
   {
     question: "How do I book a stay at Prime Peak Stays?",
     answer:
-      "Email stays@primepeakstays.com with your dates and party size. We reply directly — there's no online booking system yet, since Kanchenjunga Valley Retreat is still the only property.",
+      "Message us on WhatsApp or call +91 89105 69649 with your dates and party size. We reply directly — there's no online booking system yet, since Kanchenjunga Valley Retreat is still the only property.",
   },
   {
     question: "How do you get to Kanchenjunga Valley Retreat?",
@@ -73,7 +73,7 @@ const faqJsonLd = {
       <p class="hero__sub">
         Not a chain of rooms with a mountain nearby — a small, growing
         collection of homestays, each one built around the single sightline
-        that makes it worth the climb.
+        that makes it worth visiting.
       </p>
       <div class="hero__cta">
         <a class="btn btn-primary" href="#flagship">See the first stay</a>
@@ -152,9 +152,17 @@ const faqJsonLd = {
         second property. If you know a view, or want to be the first to know
         when we open it, get in touch.
       </p>
-      <a class="btn btn-primary" href="mailto:stays@primepeakstays.com"
-        >Talk to us</a
-      >
+      <div class="expansion__cta">
+        <a
+          class="btn btn-primary"
+          href="https://wa.me/918910569649"
+          target="_blank"
+          rel="noopener">Talk to us on WhatsApp</a
+        >
+        <a class="btn btn-ghost" href="tel:+918910569649"
+          >Call +91 89105 69649</a
+        >
+      </div>
     </div>
   </section>
 </Layout>
@@ -178,8 +186,8 @@ const faqJsonLd = {
     inset: 0;
     z-index: 1;
     background: linear-gradient(
-      190deg,
-      rgba(18, 15, 11, 0.3) 0%,
+      180deg,
+      rgba(18, 15, 11, 0.1) 0%,
       rgba(18, 15, 11, 0.55) 45%,
       var(--dusk-deep) 92%
     );
@@ -372,7 +380,10 @@ const faqJsonLd = {
     color: var(--mist);
   }
 
-  .expansion .btn {
+  .expansion__cta {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
     margin-top: var(--space-3);
   }
 
